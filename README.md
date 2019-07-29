@@ -56,17 +56,17 @@ The `meters` part of the API is already implemented and serves as a reference fo
 
 > Note: you do NOT need to implement anything regarding the /meter API. You work exclusively on the /reading API!
 
-A Meter is a device that measures energy consumption. For the proposes of this test a meter just as one important property: `serial`. The serial is a [UUID v4](https://en.wikipedia.org/wiki/Universally_unique_identifier) which identifies the meter. The serial also serves as primary key for the `meter` database table.
+A Meter is a device that measures energy consumption. For the proposes of this test a meter just has one important property: `serial`. The serial is a [UUID v4](https://en.wikipedia.org/wiki/Universally_unique_identifier) which identifies the meter. The serial also serves as primary key for the `meter` database table.
 
 ### Readings
 
 > Note: this is the part of the API you are suppose to implement!
 
-A meter regularly reads the current energy consumption and sends it to this application. The meter sends a POST request to this application containing the measurement.
+A meter regularly reads the energy consumption and sends it to this application. The meter sends a POST request to this application containing the measurement.
 
 We expect you to:
 
-- create a new database table `reading` that stores the measurements of a meter. Internal rules dictate, that all dates must be stored as type "datetime" in MySQL, even though the meters send timestamps.
+- create a new database table `reading` that stores the measurements of the meters. Internal rules dictate, that all dates must be stored as type "datetime" in MySQL, even though the meters send timestamps.
 
 - implement and test the `POST /api/v1/reading` API as specified in <http://localhost:8081/#/readings/createReading>. The code must: 
     - identify the meter using the `X-Serial` header and return a 404 if the meter is not found

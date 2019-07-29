@@ -203,6 +203,15 @@ paths:
 
 components:
   schemas:
+    MeterName:
+      type: string
+      maxLength: 10
+      minLength: 3
+      example: Facility 1
+    DateTime:
+      type: string
+      format: date-time
+      example: "2019-01-01T00:00:00+00:00"
     Meter:
       required:
         - name
@@ -211,41 +220,28 @@ components:
         - updated
       properties:
         name:
-          type: string
-          maxLength: 10
-          minLength: 3
-          example: Facility 1
+          $ref: '#/components/schemas/MeterName'
         serial:
           type: string
           format: uuid
         created:
-          type: string
-          format: date-time
-          example: "2019-01-01T00:00:00+00:00"
+          $ref: '#/components/schemas/DateTime'
         updated:
-          type: string
-          format: date-time
-          example: "2019-01-01T00:00:00+00:00"
+          $ref: '#/components/schemas/DateTime'
     CreateMeter:
       required:
         - name
         - serial
       properties:
         name:
-          type: string
-          maxLength: 10
-          minLength: 3
-          example: Facility 1
+          $ref: '#/components/schemas/MeterName'
         serial:
           type: string
           format: uuid
     UpdateMeter:
       properties:
         name:
-          type: string
-          maxLength: 10
-          minLength: 3
-          example: Facility 1
+          $ref: '#/components/schemas/MeterName'
         serial:
           type: string
           format: uuid
@@ -265,6 +261,7 @@ components:
           example: 123
           description: imported active energy in kWh
     Error:
+      additionalProperties: true
       required:
         - code
         - message
@@ -274,4 +271,5 @@ components:
           format: int32
         message:
           type: string
+          example: Something went wrong
 

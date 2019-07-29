@@ -214,7 +214,7 @@ components:
           type: string
           maxLength: 10
           minLength: 3
-          example: Main Meter of facility 1
+          example: Facility 1
         serial:
           type: string
           format: uuid
@@ -235,7 +235,7 @@ components:
           type: string
           maxLength: 10
           minLength: 3
-          example: Main Meter of facility 1
+          example: Facility 1
         serial:
           type: string
           format: uuid
@@ -245,7 +245,7 @@ components:
           type: string
           maxLength: 10
           minLength: 3
-          example: Main Meter of facility 1
+          example: Facility 1
         serial:
           type: string
           format: uuid

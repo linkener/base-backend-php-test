@@ -8,9 +8,15 @@ The application already contains a working implementation of some parts of the A
 
 > Before you start coding please make sure the software runs correctly.
 
-The software was created using the [symfony best practices](https://symfony.com/doc/current/best_practices/creating-the-project.html) in version 4.3 with PHP 7.3 and should be run in docker.
+## deliver
 
-## Install
+Please read the [API](#api) section of this document carefully, it contains all requirements of the test. If you have any doubts, please contact us.
+
+You can create a fork of this repository and send us the link, or you can zip your finished work and send the zip-archive (please don't include the /vendor folder in the zip). It doesn't really matter how you send it to us :)
+
+We will evaluate your code and may invite you to our office to talk about it and do a final interview.
+
+## install
 
 1. Install [docker](https://docs.docker.com/install/) (>= 18.02.0)
 2. Install [docker-compose](https://docs.docker.com/compose/install/) (>= 1.20.0)
@@ -21,6 +27,8 @@ The software was created using the [symfony best practices](https://symfony.com/
 > Note: this software uses port 8080 and 8081. The command `docker-compose up` will fail if those ports are not available
 
 Check if the application is up and running by navigating to <http://localhost:8080/system/health>. This URL returns a JSON file containing the system time.
+
+To stop the software Ctrl+C (terminate) the running `docker-compose up` command and run `docker-compose rm` to remove the containers.
 
 ### docker
 
@@ -47,6 +55,8 @@ The application runs with an enabled Xdebug v2.7 in case you want to debug durin
 > If you run this software with docker on an operating system other then Linux, you highly likely need to change some values in the `docker/php.ini` file for Xdebug to work with your IDE.
 
 ## API
+
+This software was created using the [symfony best practices](https://symfony.com/doc/current/best_practices/creating-the-project.html) in version 4.3 with PHP 7.3 and should be run in docker.
 
 The API definition can be found in the [open api 3 format](./doc/api.yml). If you started this software with docker compose, then you can access the swagger-ui version of this definition at <http://localhost:8081/>. The "Try it out" feature for the API is fully working and will request the running application.
 

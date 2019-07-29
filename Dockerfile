@@ -2,12 +2,13 @@ FROM php:7.3-fpm-alpine
 
 WORKDIR /code
 
-# php extensions
+# install php extensions
 RUN apk add --no-cache $PHPIZE_DEPS \
     # xdebug
     && pecl install xdebug-2.7.2 && docker-php-ext-enable xdebug \
     # pdo-mysql
-    && docker-php-ext-install pdo_mysql
+    && docker-php-ext-install pdo_mysql \
+    && rm -rf /var/cache/apk/*
 
 # install composer
 ENV COMPOSER_INSTALLER_URL=https://getcomposer.org/installer
@@ -28,5 +29,4 @@ RUN curl --silent --fail --location --retry 3 --output /tmp/installer.php --url 
  && rm -f /tmp/installer.php \
  && find /tmp -type d -exec chmod -v 1777 {} +
 
-CMD ["php-fpm", "-F"]
 EXPOSE 9000

@@ -14,7 +14,9 @@ The software was created using the [symfony best practices](https://symfony.com/
 
 1. Install [docker](https://docs.docker.com/install/) (>= 18.02.0)
 2. Install [docker-compose](https://docs.docker.com/compose/install/) (>= 1.20.0)
-3. Run `docker-compose up`
+3. Run `docker-compose up` (leave this open and continue in a new terminal)
+4. Run `docker-compose exec php composer install` to install the composer dependencies
+5. Run `docker-compose exec php bin/console doctrine:schema:create` to create the database tables
 
 > Note: this software uses port 8080 and 8081. The command `docker-compose up` will fail if those ports are not available
 

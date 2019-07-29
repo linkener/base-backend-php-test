@@ -1,0 +1,277 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Linkener PHP Backend Test
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/api/v1
+paths:
+  /meter:
+    get:
+      summary: list all meters ordered by creation date (oldest first)
+      operationId: listMeters
+      tags:
+        - meters
+      parameters:
+        - name: limit
+          in: query
+          description: how many items to return at one time
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 100
+        - name: offset
+          in: query
+          description: desired first item to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: a paged array of meters
+          headers:
+            X-Total-Count:
+              description: total amount of meters
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Meter"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: create a meter
+      operationId: createMeter
+      tags:
+        - meters
+      requestBody:
+        description: meter to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMeter'
+      responses:
+        '200':
+          description: the created meter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meter"
+        '400':
+          description: request body validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /meter/{serial}:
+    put:
+      summary: update a meter
+      operationId: updateMeter
+      tags:
+        - meters
+      parameters:
+        - name: serial
+          in: path
+          description: serial number of meter to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: meter fields to change
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeter'
+      responses:
+        '200':
+          description: the updated meter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meter"
+        '404':
+          description: meter not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '400':
+          description: request body validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: delete a meter
+      operationId: deleteMeter
+      tags:
+        - meters
+      parameters:
+        - name: serial
+          in: path
+          description: serial number of the meter to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: meter deleted
+        '404':
+          description: meter not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /reading:
+    post:
+      summary: create a reading
+      operationId: createReading
+      tags:
+        - readings
+      parameters:
+        - in: header
+          name: X-Serial
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: reading to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reading'
+      responses:
+        '200':
+          description: the created reading
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reading"
+        '404':
+          description: meter not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '400':
+          description: request body validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Meter:
+      required:
+        - name
+        - serial
+        - created
+        - updated
+      properties:
+        name:
+          type: string
+          maxLength: 10
+          minLength: 3
+          example: Main Meter of facility 1
+        serial:
+          type: string
+          format: uuid
+        created:
+          type: string
+          format: date-time
+          example: "2019-01-01T00:00:00+00:00"
+        updated:
+          type: string
+          format: date-time
+          example: "2019-01-01T00:00:00+00:00"
+    CreateMeter:
+      required:
+        - name
+        - serial
+      properties:
+        name:
+          type: string
+          maxLength: 10
+          minLength: 3
+          example: Main Meter of facility 1
+        serial:
+          type: string
+          format: uuid
+    UpdateMeter:
+      properties:
+        name:
+          type: string
+          maxLength: 10
+          minLength: 3
+          example: Main Meter of facility 1
+        serial:
+          type: string
+          format: uuid
+    Reading:
+      required:
+        - time
+        - energy
+      properties:
+        time:
+          type: integer
+          format: int64
+          example: 1546300800
+          description: unix timestamp of the reading
+        energy:
+          type: integer
+          format: int32
+          example: 123
+          description: imported active energy in kWh
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+

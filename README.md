@@ -20,7 +20,7 @@ We will evaluate your code and may invite you to our office to talk about it and
 
 1. Install [docker](https://docs.docker.com/install/) (>= 18.02.0)
 2. Install [docker-compose](https://docs.docker.com/compose/install/) (>= 1.20.0)
-3. Run `docker-compose up` (leave this open and continue in a new terminal)
+3. Run `docker-compose up` and wait until the output stops (then leave this running and continue in a new terminal)
 4. Run `docker-compose exec php composer install` to install the composer dependencies
 5. Run `docker-compose exec php bin/console doctrine:schema:create` to create the database tables
 
@@ -76,9 +76,12 @@ A meter regularly reads the energy consumption and sends it to this application.
 
 We expect you to:
 
-- create a new database table `reading` that stores the measurements of the meters. Internal rules dictate, that all dates must be stored as type "datetime" in MySQL, even though the meters send timestamps.
+- create a new database table `reading` that stores the measurements of the meters. 
+    - Internal rules dictate, that all dates must be stored as type "datetime" in MySQL, even though the meters send timestamps.
+    - There can only ever be one Reading per meter and time
 
 - implement and test the `POST /api/v1/reading` API as specified in <http://localhost:8081/#/readings/createReading>. The code must: 
     - identify the meter using the `X-Serial` header and return a 404 if the meter is not found
+    - if a Reading for the given meter and time already exists: the existing value in the database must be overwritten
     - return a 400 if the request body contains invalid JSON or an invalid reading object
     - return a 200 containing the serialized reading 

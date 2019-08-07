@@ -174,7 +174,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Reading'
+              $ref: '#/components/schemas/CreateReading'
       responses:
         '200':
           description: the created reading
@@ -212,6 +212,11 @@ components:
       type: string
       format: date-time
       example: "2019-01-01T00:00:00+00:00"
+    Energy:
+      type: integer
+      format: int32
+      example: 123
+      description: imported active energy in kWh
     Meter:
       required:
         - name
@@ -245,7 +250,7 @@ components:
         serial:
           type: string
           format: uuid
-    Reading:
+    CreateReading:
       required:
         - time
         - energy
@@ -256,10 +261,24 @@ components:
           example: 1546300800
           description: unix timestamp of the reading
         energy:
+          $ref: '#/components/schemas/Energy'
+    Reading:
+      required:
+        - id
+        - energy
+        - time
+        - meter
+      properties:
+        id:
           type: integer
-          format: int32
-          example: 123
-          description: imported active energy in kWh
+          format: int64
+          description: incremental id of the reading
+        energy:
+          $ref: '#/components/schemas/Energy'
+        time:
+          $ref: '#/components/schemas/DateTime'
+        meter:
+          $ref: "#/components/schemas/Meter"
     Error:
       additionalProperties: true
       required:
